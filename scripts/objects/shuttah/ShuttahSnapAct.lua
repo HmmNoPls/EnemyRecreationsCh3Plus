@@ -20,7 +20,7 @@ function ShuttahSnapAct:init(enemy, time, miss_add, success_add, miniboss_encoun
     self.end_transition_time = 0
 
     -- Possible states: "INSTRUCTION", "START", "ACTION", "PAUSE", "END"
-    self.state = "INSTRUCTION"
+    self.state = "START"
 
     self.clock_sprite = Sprite('ui/clock', 200, 295)
     self.clock_sprite:setOrigin(0.5, 0.5)
@@ -140,22 +140,34 @@ function ShuttahSnapAct:update()
         self.challenge_controller.camera_collider = self.camera_frame.collider
     end
 
-    if self.state == "INSTRUCTION" and Input.pressed("confirm") and self.instruction_time > 1 then
-        self.state = "START"
+    -- if self.state == "INSTRUCTION" and Input.pressed("confirm") and self.instruction_time > 1 then
+    --     self.state = "START"
+    --     if not Game.battle.battle_ui.encounter_text:isTyping() then
+    --         self:setText("[instant]* Press directions to aim!\n* Press [bind:confirm] to take the photo!")
+    --     end
+    --     for _, battler in ipairs(Game.battle.party) do
+    --         table.insert(self.party_original_x, battler.x)
+    --         battler:slideToSpeed(battler.x - 320, battler.y, 10)
+    --     end
+
+    --     for _, battler in ipairs(Game.battle.enemies) do
+    --         table.insert(self.enemy_original_x, battler.x)
+    --         battler:slideToSpeed(battler.x + 320, battler.y, 10)
+    --     end
+    if self.state == "START" and self.start_transition_time > 12 then
+        self.state = "ACTION"
         if not Game.battle.battle_ui.encounter_text:isTyping() then
             self:setText("[instant]* Press directions to aim!\n* Press [bind:confirm] to take the photo!")
         end
         for _, battler in ipairs(Game.battle.party) do
             table.insert(self.party_original_x, battler.x)
-            battler:slideToSpeed(battler.x - 320, battler.y, 10)
+            battler:slideToSpeed(battler.x - 320, battler.y, 24)
         end
 
         for _, battler in ipairs(Game.battle.enemies) do
             table.insert(self.enemy_original_x, battler.x)
-            battler:slideToSpeed(battler.x + 320, battler.y, 10)
+            battler:slideToSpeed(battler.x + 320, battler.y, 24)
         end
-    elseif self.state == "START" and self.start_transition_time > 12 then
-        self.state = "ACTION"
     elseif self.state == "ACTION" and self.elapsed_time > self.total_time then
         self.state = "PAUSE"
     elseif self.state == "PAUSE" and self:canAdvancePause() then

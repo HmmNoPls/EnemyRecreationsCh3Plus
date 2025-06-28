@@ -14,7 +14,6 @@ function SmileChallengeController:init()
 
         if i == 1 then
             self.collider = Hitbox(actor_sprite, Utils.unpack(self.collider_properties))
-            -- actor_sprite.collider = self.collider
             actor_sprite:setSprite("smile")
         else
             if Utils.random(1, 4, 1) == 1 then actor_sprite:setSprite("banana")
@@ -55,7 +54,7 @@ function SmileChallengeController:update()
     super.update(self)
 
     self.timer = self.timer + DTMULT
-    self.sprite_rotation = math.cos(math.max(0, self.timer - 40) / 20) * 60 + self.sprite_rotation_orig
+    self.sprite_rotation = math.cos(math.max(0, self.timer - 40) / 10) * 60 + self.sprite_rotation_orig
     self.flip_timer = self.flip_timer - DTMULT
     if self.flip_timer < 0 then
         local flip_speed = 15
